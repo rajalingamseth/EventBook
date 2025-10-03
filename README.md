@@ -1,1 +1,1 @@
-This project is regarding event booking and mangement
+This project is for event booking
