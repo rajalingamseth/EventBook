@@ -15,10 +15,11 @@ public class EventService {
     private EventRepository eventRepository;
 
     public List<Events> getEventData(){
-        return null;
+        return eventRepository.findAll();
     }
 
     public void addEvent(Events event){
          eventRepository.save(event);
+
     }
 }
