@@ -1,9 +1,13 @@
 package com.example.demo.Controllers;
 
+import com.example.demo.Models.EventDTO;
 import com.example.demo.Models.Events;
 import com.example.demo.Services.EventService;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -16,13 +20,24 @@ public class EventController {
     private EventService eventService;
 
     @GetMapping("Events")
-    public List<Events> getEventData(){
-        return null;
+    public ResponseEntity<List<EventDTO>> getEventData(){
+        return new ResponseEntity<>(eventService.getEventData(), HttpStatus.OK);
+    };
+
+    @PostMapping("addNewEvent")
+    public ResponseEntity<String> addNewEvent(@Valid @RequestBody Events event){
+        eventService.addEvent(event);
+        return new ResponseEntity<>("Successfully added new event", HttpStatus.OK);
     }
 
-    @PostMapping("addEvent")
-    public String  addEvent(@Valid @RequestBody Events event){
-        eventService.addEvent(event);
-        return "Success";
+    @DeleteMapping("deleteEvent/{id}")
+    public ResponseEntity<String> deleteEvent(@PathVariable int id){
+        if(eventService.deleteEventById(id)){
+            return new ResponseEntity<>("Successfully removed event", HttpStatus.OK);
+        }
+        else {
+            return new ResponseEntity<>("Could not delete the event", HttpStatus.NOT_FOUND);
+        }
     }
+
 }
