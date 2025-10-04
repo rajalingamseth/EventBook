@@ -6,11 +6,11 @@ import com.example.demo.Services.EventService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/EventBook")
@@ -19,20 +19,25 @@ public class EventController {
     @Autowired
     private EventService eventService;
 
-    @Autowired
-    private ObjectMapper objectMapper;
-
     @GetMapping("Events")
-    public List<EventDTO> getEventData(){
-        List<Events> list =  eventService.getEventData();
-        return list.stream().map(x -> objectMapper.convertValue(x, EventDTO.class)).toList();
+    public ResponseEntity<List<EventDTO>> getEventData(){
+        return new ResponseEntity<>(eventService.getEventData(), HttpStatus.OK);
     };
 
-    @PostMapping("addEvent")
-    public String addEvent(@Valid @RequestBody Events event){
+    @PostMapping("addNewEvent")
+    public ResponseEntity<String> addNewEvent(@Valid @RequestBody Events event){
         eventService.addEvent(event);
-        return "Success";
+        return new ResponseEntity<>("Successfully added new event", HttpStatus.OK);
     }
 
+    @DeleteMapping("deleteEvent/{id}")
+    public ResponseEntity<String> deleteEvent(@PathVariable int id){
+        if(eventService.deleteEventById(id)){
+            return new ResponseEntity<>("Successfully removed event", HttpStatus.OK);
+        }
+        else {
+            return new ResponseEntity<>("Could not delete the event", HttpStatus.NOT_FOUND);
+        }
+    }
 
 }
