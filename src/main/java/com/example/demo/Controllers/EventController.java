@@ -1,5 +1,6 @@
 package com.example.demo.Controllers;
 
+import com.example.demo.ErrorHandling.CustomException;
 import com.example.demo.Models.EventDTO;
 import com.example.demo.Models.Events;
 import com.example.demo.Services.EventService;
@@ -31,8 +32,12 @@ public class EventController {
     }
 
     @DeleteMapping("deleteEvent/{id}")
-    public ResponseEntity<String> deleteEvent(@PathVariable int id){
-        if(eventService.deleteEventById(id)){
+    public ResponseEntity<String> deleteEvent(@PathVariable String id) throws CustomException {
+        if (id == null || id.isBlank() || !id.matches("\\d+")) {
+            throw new CustomException("Invalid parameter passed");
+        }
+        int eventId = Integer.parseInt(id);
+        if(eventService.deleteEventById(eventId)){
             return new ResponseEntity<>("Successfully removed event", HttpStatus.OK);
         }
         else {
