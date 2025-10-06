@@ -26,6 +26,6 @@ public class ErrorHandler {
 
     @ExceptionHandler(CustomException.class)
     public ResponseEntity<String> nullParameter(CustomException e){
-        return ResponseEntity.badRequest().body("Invalid or missing event ID.");
+        return ResponseEntity.badRequest().body(e.getMessage());
     }
 }

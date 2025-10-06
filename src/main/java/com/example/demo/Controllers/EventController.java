@@ -34,7 +34,7 @@ public class EventController {
     @DeleteMapping("deleteEvent/{id}")
     public ResponseEntity<String> deleteEvent(@PathVariable String id) throws CustomException {
         if (id == null || id.isBlank() || !id.matches("\\d+")) {
-            throw new CustomException("Invalid parameter passed");
+            throw new CustomException("Invalid or missing event ID.");
         }
         int eventId = Integer.parseInt(id);
         if(eventService.deleteEventById(eventId)){
