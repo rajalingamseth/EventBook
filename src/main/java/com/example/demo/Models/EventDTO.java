@@ -20,6 +20,6 @@ public class EventDTO
     @JsonFormat(pattern = "yyyy-MM-dd")
     private Date eventDate;
     private double price;
-    private boolean available;
+    private int tickets_available;
 
 }

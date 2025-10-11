@@ -34,6 +34,7 @@ public class Events {
     private double price;
 
     @NotNull(message = "Availability is required!")
-    private boolean available;
+    @Min(value = 10, message = "Tickets must be greater than or equal to 10")
+    private int tickets_available;
 
 }
