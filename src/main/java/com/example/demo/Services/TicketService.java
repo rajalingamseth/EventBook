@@ -3,6 +3,7 @@ package com.example.demo.Services;
 import com.example.demo.ErrorHandling.CustomException;
 import com.example.demo.Models.Events;
 import com.example.demo.Models.Ticket;
+import com.example.demo.Models.TicketDTO;
 import com.example.demo.Repositories.TicketRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -21,18 +22,15 @@ public class TicketService {
     private TicketRepository ticketRepository;
 
 
-    public String purchaseTickets(int eventId, int numberofTickets) throws CustomException {
-        Events event =  eventService.getEventbyId(eventId);
+    public String purchaseTickets(TicketDTO ticketDTO) throws CustomException {
+        Events event =  eventService.getEventbyId(ticketDTO.getEventId());
         if(event != null){
-           int remaining_tickets = event.getTickets_available()-numberofTickets;
+           int remaining_tickets = event.getTickets_available()-ticketDTO.getTicketsBooked();
            event.setTickets_available(remaining_tickets);
            eventService.updateEvent(event);
-           String ticketId = generateUniqueTicketCodes(eventId);
+           String ticketId = generateUniqueTicketCodes(ticketDTO.getEventId());
 
-           Ticket ticket = new Ticket();
-           ticket.setTicketId(ticketId);
-           ticket.setEventId(eventId);
-           ticket.setTicketsBooked(numberofTickets);
+           Ticket ticket = new Ticket(ticketId, ticketDTO.getUserId(), ticketDTO.getEventId(), ticketDTO.getTicketsBooked());
 
            ticketRepository.save(ticket);
 
