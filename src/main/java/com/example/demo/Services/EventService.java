@@ -18,6 +18,10 @@ public class EventService {
 
     @Autowired
     private ObjectMapper objectMapper;
+    
+    public Events getEventbyId(int id){
+        return eventRepository.findById(id).orElse(null);
+    }
 
     public List<EventDTO> getEventData(){
         List<Events> listOfEvents =  eventRepository.findAll();
@@ -36,7 +40,10 @@ public class EventService {
         else{
             return false;
         }
+    }
 
+    public void updateEvent(Events events){
+        eventRepository.save(events);
     }
 }
 

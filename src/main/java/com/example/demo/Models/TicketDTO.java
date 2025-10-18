@@ -1,25 +1,25 @@
 package com.example.demo.Models;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
+
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import jakarta.persistence.*;
+import jakarta.persistence.criteria.CriteriaBuilder;
+import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.util.Date;
-
 @JsonIgnoreProperties(ignoreUnknown = true)
 @Getter
 @Setter
-public class EventDTO
-{
+public class TicketDTO {
 
-    private String eventName;
-    @JsonFormat(pattern = "yyyy-MM-dd")
-    private Date eventDate;
-    private double price;
-    private int tickets_available;
+    private String ticketId;
+    @NotNull
+    private Integer userId;
+    @NotNull
+    private Integer eventId;
+    @Min(1)
+    private int ticketsBooked;
 
 }
