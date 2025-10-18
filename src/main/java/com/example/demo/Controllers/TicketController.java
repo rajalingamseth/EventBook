@@ -6,6 +6,7 @@ import com.example.demo.Models.Events;
 import com.example.demo.Models.TicketDTO;
 import com.example.demo.Services.EventService;
 import com.example.demo.Services.TicketService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpStatus;
@@ -22,14 +23,14 @@ public class TicketController {
     private TicketService ticketService;
 
     @PostMapping("buyTickets")
-    public ResponseEntity<String> buyTickets(@RequestBody TicketDTO ticketDTO) throws CustomException {
+    public ResponseEntity<String> buyTickets( @Valid @RequestBody TicketDTO ticketDTO) {
         if(ticketService.checkAvailability(ticketDTO.getEventId(), ticketDTO.getTicketsBooked())){
            String bookingId  = ticketService.purchaseTickets(ticketDTO);
            return new ResponseEntity<>("Booking Successful! - " + bookingId, HttpStatus.OK);
         }
         else{
-            return new ResponseEntity<>("Tickets not available", HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>("Sorry! " +  ticketService.availableTickets(ticketDTO) + " tickets available for this event", HttpStatus.BAD_REQUEST);
         }
-
     }
+
 }
